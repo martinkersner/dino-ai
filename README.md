@@ -1,6 +1,7 @@
 # dino-ai
 
 ## Credits
+[wayou](https://github.com/wayou/t-rex-runner)
 [carlcortright](https://github.com/carlcortright/DinoRL)
 
 ## License
