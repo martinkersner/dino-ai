@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body id="t" class="offline">
+  <div id="main-frame-error" class="interstitial-wrapper">
+    <div id="main-content">
+    </div>
+  </div>
+
+  <div id="offline-resources">
+    <img id="offline-resources-1x" src="assets/offline-sprite-1x.png">
+    <img id="offline-resources-2x" src="assets/offline-sprite-2x.png">
+    <template id="audio-resources">
+    </template>
+  </div>
+
+  <!--<script src="reinforcejs/lib/rl.js"></script>-->
+
+  <script src="js/game.js"></script>
+  <!--<script src="js/player.js"></script>-->
+
+  <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+  <!--<script type="text/javascript" src="js/chart.js"></script>-->
+
+  <!--<script src="js/learn.js"></script>-->
+  <script type="text/javascript">
+    setInterval(function (){Runner.instance_.tRex.xPos = 21}, 2000);
+  </script>
+
+</body>
+
+</html>
