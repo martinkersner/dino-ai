@@ -20,26 +20,11 @@
   <!--<script src="reinforcejs/lib/rl.js"></script>-->
 
   <script src="js/game.js"></script>
-  <!--<script src="js/player.js"></script>-->
-  <!--<script src="js/learn.js"></script>-->
-  <script>
-    function saveBase64AsFile(base64, fileName) {
-
-      var link = document.createElement("a");
-
-      link.setAttribute("href", base64);
-      link.setAttribute("download", fileName);
-      link.click();
-    }
-
-    setInterval(function (){
-    var image = document.getElementsByClassName("runner-canvas")[0].toDataURL("image/png").replace("image/png", "image/octet-stream");
-    var unix = Math.round(+new Date()/1000);
-    saveBase64AsFile(image, unix);
-    } , 2000);
-  </script>
+  <script src="js/player.js"></script>
+  <script src="js/random.js"></script>
 
   <script type="text/javascript">
+    // https://github.com/ivanseidel/IAMDinosaur#be-aware-of-a-game-bug
     setInterval(function (){Runner.instance_.tRex.xPos = 21}, 2000);
   </script>
 
