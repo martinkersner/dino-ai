@@ -19,7 +19,6 @@ setInterval(function()
     } else if (game.activated) { // PLAYING
 
       currentSpeed = game.currentSpeed;
-      tRex_yPos = 93 - game.tRex.yPos; // game default is 93
 
       // NO OBSTACLES
       if (game.horizon.obstacles.length == 0) {
