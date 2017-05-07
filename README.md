@@ -12,7 +12,9 @@
 
 ## Credits
 [wayou](https://github.com/wayou/t-rex-runner)
+
 [carlcortright](https://github.com/carlcortright/DinoRL)
+
 [convnetjs](https://github.com/karpathy/convnetjs)
 
 ## License
