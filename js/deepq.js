@@ -3,6 +3,7 @@
 
 var game = window.dinoGame;
 var player = new Player();
+var clock = 0;
 
 var actionInterval = 50;
 var distSpeedThreshold = 13;
@@ -15,9 +16,9 @@ var obstacleWidth;
 var obstacleType;
 
 // Deep Q Learning parameters
-var num_inputs = 27; // speed, obstacle distance, obstacle y-position
+var num_inputs = 5; // speed, obstacle distance, obstacle y-position
 var num_actions = 3; // JUMP, DUCK, IDLE
-var temporal_window = 1; // amount of temporal memory. 0 = agent lives in-the-moment :)
+var temporal_window = 5; // amount of temporal memory. 0 = agent lives in-the-moment :)
 var network_size = num_inputs*temporal_window + num_actions*temporal_window + num_inputs;
 
 // the value function network computes a value of taking any of the possible actions
@@ -112,16 +113,29 @@ setInterval(function()
         player.do(Player.actions.IDLE);
 
       if (obstacleDetected) {
-        if (game.tRex.xPos > obst.xPos
-            && game.tRex.xPos < obst.xPos + obst.width
-            && game.tRex.yPos > obst.yPos)
-        {
-          brain.backward(50);
+        if (game.tRex.xPos > obst.xPos) {
+          console.log("positive reward 1");
+          brain.backward(0.5);
+        }
+
+        if (game.tRex.xPos > obst.xPos + obst.width) {
+          console.log("positive reward 2");
+          brain.backward(0.5);
+        }
+
+        if (game.tRex.yPos > obst.yPos && game.tRex.xPos > obst.xPos) {
+          console.log("positive reward 3");
+          brain.backward(1);
         }
       }
+      //else {
+        //brain.backward(game.distanceRan*0.00025);
+      //}
     }
-    else { // DIED
-      brain.backward(-10);
+    else { // DINO DIED
+      brain.backward(-1.0);
       game.restart();
     }
+
+  clock +=1;
   }, actionInterval);

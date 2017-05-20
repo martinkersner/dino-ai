@@ -36,6 +36,36 @@
     setInterval(function (){Runner.instance_.tRex.xPos = 21}, 2000);
   </script>
 
+  <center>
+    <canvas id="graph_canvas" width="350" height="150"></canvas><br />
+    <button onclick="savenet()">Save</button>
+    <button onclick="loadnet()">Load</button><br /><br />
+
+    <textarea id="tt" style="width:100%; height:200px;"></textarea>
+  </center>
+
+  <script type="text/javascript">
+    function savenet() {
+      var j = brain.value_net.toJSON();
+      var t = JSON.stringify(j);
+      document.getElementById('tt').value = t;
+    }
+
+    function loadnet() {
+      var t = document.getElementById('tt').value;
+      var j = JSON.parse(t);
+      brain.value_net.fromJSON(j);
+    }
+
+    var reward_graph = new cnnvis.Graph();
+
+setInterval(function() {
+    reward_graph.add(clock/20, brain.average_reward_window.get_average());
+    var gcanvas = document.getElementById("graph_canvas");
+    reward_graph.drawSelf(gcanvas);
+}, 1000);
+  </script>
+
 </body>
 
 </html>
