@@ -39,6 +39,7 @@
   <center>
     <canvas id="graph_canvas" width="350" height="150"></canvas><br />
     <canvas id="net_canvas" width="700" height="200"></canvas><br />
+    <div id="brain_info_div"></div><br />
     <button onclick="savenet()">Save</button>
     <button onclick="loadnet()">Load</button><br /><br />
 
@@ -96,10 +97,13 @@
     var reward_graph = new cnnvis.Graph();
 
 setInterval(function() {
-    reward_graph.add(clock/20, brain.average_reward_window.get_average());
-    var gcanvas = document.getElementById("graph_canvas");
-    reward_graph.drawSelf(gcanvas);
+    if (clock % 20 === 0) {
+      reward_graph.add(clock/20, brain.average_reward_window.get_average());
+      var gcanvas = document.getElementById("graph_canvas");
+      reward_graph.drawSelf(gcanvas);
+    }
     draw_net();
+    brain.visSelf(document.getElementById('brain_info_div'));
 }, 1000);
   </script>
 
