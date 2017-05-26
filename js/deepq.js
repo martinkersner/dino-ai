@@ -46,8 +46,8 @@ var tdtrainer_options = {learning_rate:0.01, momentum:0.9, batch_size:64, l2_dec
 var opt = {};
 opt.temporal_window = temporal_window;
 opt.experience_size = 30000;
-opt.start_learn_threshold = 1000;
-//opt.start_learn_threshold = 10;
+//opt.start_learn_threshold = 1000;
+opt.start_learn_threshold = 70;
 opt.gamma = 0.7;
 opt.learning_steps_total = 200000;
 opt.learning_steps_burnin = 3000;
@@ -55,6 +55,7 @@ opt.epsilon_min = 0.05;
 opt.epsilon_test_time = 0.05;
 opt.layer_defs = layer_defs;
 opt.tdtrainer_options = tdtrainer_options;
+opt.random_action_distribution = [0.1, 0.9]
 
 var brain = new deepqlearn.Brain(num_inputs, num_actions, opt);
 
@@ -68,7 +69,7 @@ function getObstacleType(obst) {
   }
 }
 
-setInterval(function()
+var refreshId = setInterval(function()
   {
     if (!game.started) { // START GAME
       game.playIntro();
@@ -141,22 +142,22 @@ setInterval(function()
           var tRex_xPos = game.tRex.xPos;
 
           if (tRex_xPos >= obst0.xPos) {
-            //console.log("positive reward 1");
-            brain.backward(5);
-            //brain.backward(50);
+            brain.backward(0.4);
           }
 
           if (tRex_xPos >= (obst0.xPos + obst0.width)) {
-            //console.log("positive reward 2");
-            brain.backward(10);
-            //brain.backward(50);
+            brain.backward(0.6);
           }
+      }
+
+
+      if (brain.value_net.layers[6].out_act != undefined && brain.value_net.layers[6].out_act.dw.includes(NaN)) {
+        clearInterval(refreshId);
       }
     }
     else { // DINO DIED
       //console.log("negative reward");
-      //if (game.horizon.obstacles[0].xPos;
-      brain.backward(-1.0);
+      brain.backward(0.0);
       game.restart();
     }
 
