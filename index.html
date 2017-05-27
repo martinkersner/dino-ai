@@ -97,11 +97,9 @@
     var reward_graph = new cnnvis.Graph();
 
 setInterval(function() {
-    if (clock % 20 === 0) {
-      reward_graph.add(clock/20, brain.average_reward_window.get_average());
-      var gcanvas = document.getElementById("graph_canvas");
-      reward_graph.drawSelf(gcanvas);
-    }
+    reward_graph.add(brain.age, brain.average_reward_window.get_average());
+    var gcanvas = document.getElementById("graph_canvas");
+    reward_graph.drawSelf(gcanvas);
     draw_net();
     brain.visSelf(document.getElementById('brain_info_div'));
 }, 1000);
