@@ -20,8 +20,8 @@ function sigmoid(t) {
 }
 
 // obstacle auxiliary variables
-var avg = [6.175325951887915,434.9119005894536,9.353512824597738,18.91190058945356,0.6445754341245818];
-var std = [0.11507956470875452,214.75567671662398,10.88515624967912,21.91747480737234,0.7992795658365198];
+//var avg = [6.175325951887915,434.9119005894536,9.353512824597738,18.91190058945356,0.6445754341245818];
+//var std = [0.11507956470875452,214.75567671662398,10.88515624967912,21.91747480737234,0.7992795658365198];
 
 // Deep Q Learning parameters
 var num_inputs = 5; // speed, obstacle distance, obstacle y-position
@@ -49,17 +49,17 @@ opt.epsilon_min = 0.05;
 opt.epsilon_test_time = 0.05;
 opt.layer_defs = layer_defs;
 opt.tdtrainer_options = tdtrainer_options;
-opt.random_action_distribution = [0.1, 0.9]
+opt.random_action_distribution = [0.1, 0.9];
 
 var brain = new deepqlearn.Brain(num_inputs, num_actions, opt);
 
 function getObstacleType(obst) {
   if (obst.typeConfig.type == "CACTUS_LARGE") {
-    return 1;
+    return 0;
   } else if (obst.typeConfig.type == "CACTUS_SMALL") {
-    return 2;
+    return 1;
   } else if (obst.typeConfig.type == "PTERODACTYL") {
-    return 3;
+    return 2;
   }
 }
 
@@ -72,9 +72,8 @@ function makeStep(idx) {
   } else if (games[idx].activated) { // PLAYING
     var currentSpeed = games[idx].currentSpeed;
 
-    var gameStatus = [0, games[idx].dimensions["WIDTH"], 0, 0, 0];
-    gameStatus[0] = currentSpeed;
-    gameStatus[1] = games[idx].dimensions["WIDTH"];
+    var gameStatus = [0, 1, 0, 0, 0];
+    gameStatus[0] = currentSpeed / games[idx].config.MAX_SPEED;
 
     // NO OBSTACLES
     if (games[idx].horizon.obstacles.length == 0) {
@@ -85,22 +84,21 @@ function makeStep(idx) {
       var obst = games[idx].horizon.obstacles[0];
       var tRex_xPos = games[idx].tRex.xPos;
 
-      gameStatus[1] = obst.xPos - tRex_xPos;
-      gameStatus[2] = obst.typeConfig.width;
-      gameStatus[3] = obst.typeConfig.height;
-      gameStatus[4] = getObstacleType(obst);
+      gameStatus[1] = (obst.xPos - tRex_xPos)/games[idx].dimensions["WIDTH"];
+      var tmpIdx = getObstacleType(games[idx].horizon.obstacles[0]);
+      gameStatus[2+tmpIdx] = 1;
 
       if (tRex_xPos < obst.xPos) {
         obstacleDetected = true;
       }
     }
 
-    var gameStatus_avg = gameStatus.map(function(n, i) { return n - avg[i]; });
-    var gameStatus_norm = gameStatus_avg.map(function(n, i) { return n / std[i]; })
-    var gameStatus_sigm = gameStatus_norm.map(sigmoid);
+    //var gameStatus_avg = gameStatus.map(function(n, i) { return n - avg[i]; });
+    //var gameStatus_norm = gameStatus_avg.map(function(n, i) { return n / std[i]; })
+    //var gameStatus_sigm = gameStatus_norm.map(sigmoid);
 
     // FORWARD
-    var action = brain.forward(gameStatus_sigm);
+    var action = brain.forward(gameStatus);
 
     if (action == 0)
       player.do(Player.actions.JUMP);
@@ -115,6 +113,7 @@ function makeStep(idx) {
 
       if ((tRex_xPos+50) >= (obst0.xPos + obst0.width)) {
         brain.backward(10.0);
+        console.log(idx);
       }
       else {
         nothing = false;
