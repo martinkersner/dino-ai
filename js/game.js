@@ -2518,6 +2518,3 @@ Horizon.prototype = {
   }
 };
 })();
-
-//start the game
-window.dinoGame = new Runner('.interstitial-wrapper');
